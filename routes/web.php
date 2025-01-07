@@ -43,3 +43,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
+    Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
+});
