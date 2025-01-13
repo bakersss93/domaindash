@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Http;
 
 class SynergyWholesaleServiceProvider extends ServiceProvider
 {
@@ -14,67 +13,75 @@ class SynergyWholesaleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('synergy', function () {
             return new class {
-                private $apiUrl;
+                private $client;
                 private $resellerId;
                 private $apiKey;
 
                 public function __construct()
                 {
-                    $this->apiUrl = config('synergy.api_url');
                     $this->resellerId = config('synergy.reseller_id');
                     $this->apiKey = config('synergy.api_key');
+
+                    // Initialize the SOAP client
+                    $this->client = new \SoapClient(config('synergy.api_url'), [
+                        'trace' => 1,
+                        'exceptions' => true,
+                        'cache_wsdl' => WSDL_CACHE_NONE,
+                    ]);
                 }
 
-                private function request($endpoint, $params = [])
+                /**
+                 * Execute a SOAP request with authentication.
+                 */
+                private function request($method, $params = [])
                 {
-                    $response = Http::withHeaders([
-                        'Authorization' => 'Bearer ' . $this->apiKey,
-                        'Accept' => 'application/json',
-                    ])->post($this->apiUrl . $endpoint, array_merge([
-                        'reseller_id' => $this->resellerId,
-                    ], $params));
+                    $params = array_merge([
+                        'resellerID' => $this->resellerId,
+                        'apiKey' => $this->apiKey,
+                    ], $params);
 
-                    if ($response->failed()) {
-                        throw new \Exception('Synergy Wholesale API call failed: ' . $response->body());
+                    try {
+                        $response = $this->client->__soapCall($method, [$params]);
+                        return json_decode(json_encode($response), true);
+                    } catch (\SoapFault $e) {
+                        throw new \Exception("SOAP API Error: {$e->getMessage()}");
                     }
-
-                    return $response->json();
                 }
 
                 // Domain Management
                 public function checkDomainAvailability($domain)
                 {
-                    return $this->request('/domain/check', ['domain' => $domain]);
+                    return $this->request('CheckDomain', ['domainName' => $domain]);
                 }
 
                 public function retrieveBulkDomainInformation()
                 {
-                    return $this->request('/domain/bulkinfo');
+                    return $this->request('GetDomainList');
                 }
 
                 public function transferDomain($domain, $authCode)
                 {
-                    return $this->request('/domain/transfer', [
-                        'domain' => $domain,
-                        'auth_code' => $authCode,
+                    return $this->request('TransferDomain', [
+                        'domainName' => $domain,
+                        'authCode' => $authCode,
                     ]);
                 }
 
                 public function renewDomain($domain)
                 {
-                    return $this->request('/domain/renew', ['domain' => $domain]);
+                    return $this->request('RenewDomain', ['domainName' => $domain]);
                 }
 
                 // DNS Management
                 public function retrieveDNSRecords($domain)
                 {
-                    return $this->request('/dns/records', ['domain' => $domain]);
+                    return $this->request('GetDNSRecords', ['domainName' => $domain]);
                 }
 
                 public function createDNSRecord($domain, $type, $name, $value, $ttl = 3600)
                 {
-                    return $this->request('/dns/create', [
-                        'domain' => $domain,
+                    return $this->request('AddDNSRecord', [
+                        'domainName' => $domain,
                         'type' => $type,
                         'name' => $name,
                         'value' => $value,
@@ -84,9 +91,9 @@ class SynergyWholesaleServiceProvider extends ServiceProvider
 
                 public function updateDNSRecord($domain, $recordId, $type, $name, $value, $ttl = 3600)
                 {
-                    return $this->request('/dns/update', [
-                        'domain' => $domain,
-                        'record_id' => $recordId,
+                    return $this->request('UpdateDNSRecord', [
+                        'domainName' => $domain,
+                        'recordID' => $recordId,
                         'type' => $type,
                         'name' => $name,
                         'value' => $value,
@@ -96,117 +103,117 @@ class SynergyWholesaleServiceProvider extends ServiceProvider
 
                 public function deleteDNSRecord($domain, $recordId)
                 {
-                    return $this->request('/dns/delete', [
-                        'domain' => $domain,
-                        'record_id' => $recordId,
+                    return $this->request('DeleteDNSRecord', [
+                        'domainName' => $domain,
+                        'recordID' => $recordId,
                     ]);
                 }
 
                 public function retrieveDNSZone($domain)
                 {
-                    return $this->request('/dns/zone', ['domain' => $domain]);
+                    return $this->request('GetDNSZone', ['domainName' => $domain]);
                 }
 
                 public function setDefaultDNSZone($domain)
                 {
-                    return $this->request('/dns/reset', ['domain' => $domain]);
+                    return $this->request('ResetDNSZone', ['domainName' => $domain]);
                 }
 
                 public function applyDNSTemplate($domain, $templateId)
                 {
-                    return $this->request('/dns/template/apply', [
-                        'domain' => $domain,
-                        'template_id' => $templateId,
+                    return $this->request('ApplyDNSTemplate', [
+                        'domainName' => $domain,
+                        'templateID' => $templateId,
                     ]);
                 }
 
                 public function delegateDNSZone($domain, $nameservers)
                 {
-                    return $this->request('/dns/delegate', [
-                        'domain' => $domain,
-                        'nameservers' => $nameservers,
+                    return $this->request('UpdateNameServers', [
+                        'domainName' => $domain,
+                        'nameServers' => $nameservers,
                     ]);
                 }
 
                 // DNS Audit
                 public function auditDNSRecords($domain)
                 {
-                    return $this->request('/dns/audit', ['domain' => $domain]);
+                    return $this->request('AuditDNSRecords', ['domainName' => $domain]);
                 }
 
                 public function exportDNSZone($domain)
                 {
-                    return $this->request('/dns/zone/export', ['domain' => $domain]);
+                    return $this->request('ExportDNSZone', ['domainName' => $domain]);
                 }
 
                 public function checkDNSPropagation($domain)
                 {
-                    return $this->request('/dns/propagation', ['domain' => $domain]);
+                    return $this->request('CheckDNSPropagation', ['domainName' => $domain]);
                 }
 
                 public function detectDNSErrors($domain)
                 {
-                    return $this->request('/dns/errors', ['domain' => $domain]);
+                    return $this->request('DetectDNSErrors', ['domainName' => $domain]);
                 }
 
                 // Hosting Services
                 public function retrieveHostingServices($domain)
                 {
-                    return $this->request('/hosting/services', ['domain' => $domain]);
+                    return $this->request('GetHostingDetails', ['domainName' => $domain]);
                 }
 
                 public function updateHostingServices($domain, $params)
                 {
-                    return $this->request('/hosting/update', array_merge(['domain' => $domain], $params));
+                    return $this->request('UpdateHostingDetails', array_merge(['domainName' => $domain], $params));
                 }
 
                 public function loginToCpanel($domain)
                 {
-                    return $this->request('/hosting/cpanel/login', ['domain' => $domain]);
+                    return $this->request('GetCPanelLoginURL', ['domainName' => $domain]);
                 }
 
                 // SSL Services
                 public function retrieveSSLCertificates($domain)
                 {
-                    return $this->request('/ssl/list', ['domain' => $domain]);
+                    return $this->request('GetSSLDetails', ['domainName' => $domain]);
                 }
 
                 public function renewSSLCertificate($certificateId)
                 {
-                    return $this->request('/ssl/renew', ['certificate_id' => $certificateId]);
+                    return $this->request('RenewSSL', ['certificateID' => $certificateId]);
                 }
 
                 public function purchaseSSLCertificate($params)
                 {
-                    return $this->request('/ssl/purchase', $params);
+                    return $this->request('OrderSSL', $params);
                 }
 
                 // Notifications
                 public function retrieveDomainExpiryNotifications()
                 {
-                    return $this->request('/notifications/domain-expiry');
+                    return $this->request('GetDomainExpiryNotifications');
                 }
 
                 public function retrieveSSLExpiryNotifications()
                 {
-                    return $this->request('/notifications/ssl-expiry');
+                    return $this->request('GetSSLExpiryNotifications');
                 }
 
                 // Account Management
                 public function retrieveResellerBalance()
                 {
-                    return $this->request('/account/balance');
+                    return $this->request('GetBalance');
                 }
 
                 public function updateAPIKey($newKey)
                 {
-                    return $this->request('/account/api-key/update', ['api_key' => $newKey]);
+                    return $this->request('UpdateAPIKey', ['apiKey' => $newKey]);
                 }
 
                 // Reports and Analytics
                 public function generateReports($type)
                 {
-                    return $this->request('/reports/generate', ['type' => $type]);
+                    return $this->request('GenerateReport', ['reportType' => $type]);
                 }
             };
         });
