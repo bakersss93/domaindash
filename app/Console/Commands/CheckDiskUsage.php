@@ -1,6 +1,9 @@
+<?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\HostingService;
 
 class CheckDiskUsage extends Command
 {
