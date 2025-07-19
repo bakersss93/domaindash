@@ -9,8 +9,8 @@ class SynergyAPIController extends Controller
     public function edit()
     {
         $settings = [
-            'reseller_id' => env('SYNERGY_RESELLER_ID'),
-            'api_key' => env('SYNERGY_API_KEY'),
+            'reseller_id' => config('synergy.reseller_id'),
+            'api_key' => config('synergy.api_key'),
         ];
 
         return view('admin.synergy-api.edit', compact('settings'));
@@ -35,6 +35,12 @@ class SynergyAPIController extends Controller
             'SYNERGY_API_KEY=' . $request->api_key,
             file_get_contents($path)
         ));
+
+        // Update runtime configuration
+        config([
+            'synergy.reseller_id' => $request->reseller_id,
+            'synergy.api_key' => $request->api_key,
+        ]);
 
         return redirect()->route('synergy-api.edit')->with('success', 'Synergy API details updated successfully.');
     }

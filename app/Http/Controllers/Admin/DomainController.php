@@ -12,9 +12,9 @@ class DomainController extends Controller
     public function bulkUpdateDomains()
     {
         // Synergy Wholesale API credentials
-        $apiEndpoint = 'https://api.synergywholesale.com';
-        $resellerId = config('services.synergy.reseller_id');
-        $apiKey = config('services.synergy.api_key');
+        $apiEndpoint = config('synergy.api_url');
+        $resellerId = config('synergy.reseller_id');
+        $apiKey = config('synergy.api_key');
 
         try {
             // SOAP Client setup
