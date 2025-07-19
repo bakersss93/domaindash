@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Domain;
 use Illuminate\Http\Request;
 use SoapClient;
+use App\Models\SynergyCredential;
 
 class DomainController extends Controller
 {
@@ -13,8 +14,9 @@ class DomainController extends Controller
     {
         // Synergy Wholesale API credentials
         $apiEndpoint = 'https://api.synergywholesale.com';
-        $resellerId = config('services.synergy.reseller_id');
-        $apiKey = config('services.synergy.api_key');
+        $credentials = SynergyCredential::first();
+        $resellerId = $credentials->reseller_id ?? config('synergy.reseller_id');
+        $apiKey = $credentials->api_key ?? config('synergy.api_key');
 
         try {
             // SOAP Client setup

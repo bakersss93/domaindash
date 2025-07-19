@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SynergyCredential;
 
 class SynergyAPIController extends Controller
 {
     public function edit()
     {
+        $credentials = SynergyCredential::first();
         $settings = [
-            'reseller_id' => env('SYNERGY_RESELLER_ID'),
-            'api_key' => env('SYNERGY_API_KEY'),
+            'reseller_id' => $credentials->reseller_id ?? '',
+            'api_key' => $credentials->api_key ?? '',
         ];
 
         return view('admin.synergy-api.edit', compact('settings'));
@@ -23,18 +25,18 @@ class SynergyAPIController extends Controller
             'api_key' => 'required|string|max:255',
         ]);
 
-        // Update .env file
-        $path = base_path('.env');
-        file_put_contents($path, str_replace(
-            'SYNERGY_RESELLER_ID=' . env('SYNERGY_RESELLER_ID'),
-            'SYNERGY_RESELLER_ID=' . $request->reseller_id,
-            file_get_contents($path)
-        ));
-        file_put_contents($path, str_replace(
-            'SYNERGY_API_KEY=' . env('SYNERGY_API_KEY'),
-            'SYNERGY_API_KEY=' . $request->api_key,
-            file_get_contents($path)
-        ));
+        $credential = SynergyCredential::first();
+        if ($credential) {
+            $credential->update([
+                'reseller_id' => $request->reseller_id,
+                'api_key' => $request->api_key,
+            ]);
+        } else {
+            SynergyCredential::create([
+                'reseller_id' => $request->reseller_id,
+                'api_key' => $request->api_key,
+            ]);
+        }
 
         return redirect()->route('synergy-api.edit')->with('success', 'Synergy API details updated successfully.');
     }

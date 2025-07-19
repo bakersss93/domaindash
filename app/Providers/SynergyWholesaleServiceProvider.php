@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\SynergyCredential;
 
 class SynergyWholesaleServiceProvider extends ServiceProvider
 {
@@ -19,8 +20,9 @@ class SynergyWholesaleServiceProvider extends ServiceProvider
 
                 public function __construct()
                 {
-                    $this->resellerId = config('synergy.reseller_id');
-                    $this->apiKey = config('synergy.api_key');
+                    $credentials = SynergyCredential::first();
+                    $this->resellerId = $credentials->reseller_id ?? config('synergy.reseller_id');
+                    $this->apiKey = $credentials->api_key ?? config('synergy.api_key');
 
                     // Initialize the SOAP client
                     $this->client = new \SoapClient(config('synergy.api_url'), [
