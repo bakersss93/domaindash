@@ -27,23 +27,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
 });
 #Customer
-Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('domains', [DomainController::class, 'index'])->name('customer.domains.index');
-    Route::get('hosting-services', [HostingServiceController::class, 'index'])->name('customer.hosting.index');
-    Route::get('ssl-services', [SSLServiceController::class, 'index'])->name('customer.ssl.index');
-});
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
+    Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
 });
