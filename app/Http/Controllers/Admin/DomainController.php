@@ -5,39 +5,26 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Domain;
 use Illuminate\Http\Request;
-use SoapClient;
 
 class DomainController extends Controller
 {
     public function bulkUpdateDomains()
     {
-        // Synergy Wholesale API credentials
-        $apiEndpoint = 'https://api.synergywholesale.com';
-        $resellerId = config('services.synergy.reseller_id');
-        $apiKey = config('services.synergy.api_key');
+        $domainList = Domain::pluck('domain_name')->toArray();
 
         try {
-            // SOAP Client setup
-            $client = new SoapClient($apiEndpoint, [
-                'trace' => true,
-                'exceptions' => true,
-            ]);
-
-            // API Request
-            $response = $client->bulkDomainInfo([
-                'resellerId' => $resellerId,
-                'apiKey' => $apiKey,
-            ]);
+            $synergy = app('synergy');
+            $response = $synergy->bulkDomainInfo($domainList);
 
             // Process the response
-            foreach ($response->domains as $domainData) {
+            foreach ($response['domains'] as $domainData) {
                 Domain::updateOrCreate(
-                    ['domain_name' => $domainData->domainName],
+                    ['domain_name' => $domainData['domainName']],
                     [
                         'customer_id' => null, // Initially unassigned
-                        'auto_renew' => $domainData->autoRenew,
-                        'renewal_date' => $domainData->renewalDate,
-                        'transfer_status' => $domainData->transferStatus,
+                        'auto_renew' => $domainData['autoRenew'] ?? null,
+                        'renewal_date' => $domainData['renewalDate'] ?? null,
+                        'transfer_status' => $domainData['transferStatus'] ?? null,
                     ]
                 );
             }

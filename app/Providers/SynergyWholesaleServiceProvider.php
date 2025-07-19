@@ -59,6 +59,13 @@ class SynergyWholesaleServiceProvider extends ServiceProvider
                     return $this->request('GetDomainList');
                 }
 
+                public function bulkDomainInfo(array $domainList)
+                {
+                    return $this->request('bulkDomainInfo', [
+                        'domainList' => $domainList,
+                    ]);
+                }
+
                 public function transferDomain($domain, $authCode)
                 {
                     return $this->request('TransferDomain', [
