@@ -13,8 +13,12 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
+        if (!auth()->check() || auth()->user()->role !== $role) {
+            return redirect()->route('dashboard')->withErrors('Access denied.');
+        }
+
         return $next($request);
     }
 }
