@@ -107,6 +107,9 @@
                                     {{ __('API Tokens') }}
                                 </x-dropdown-link>
                             @endif
+                            <x-dropdown-link href="{{ route('support-ticket.create') }}">
+                                {{ __('Log Support Ticket') }}
+                            </x-dropdown-link>
 
                             <div class="border-t border-gray-200"></div>
 
@@ -170,6 +173,9 @@
                         {{ __('API Tokens') }}
                     </x-responsive-nav-link>
                 @endif
+                <x-responsive-nav-link href="{{ route('support-ticket.create') }}" :active="request()->routeIs('support-ticket.create')">
+                    {{ __('Log Support Ticket') }}
+                </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
