@@ -13,6 +13,11 @@ class EmailTemplateController extends Controller
         return view('admin.email-templates.index', compact('templates'));
     }
 
+    public function create()
+    {
+        return view('admin.email-templates.create');
+    }
+
     public function edit($id)
     {
         $template = EmailTemplate::findOrFail($id);
@@ -30,5 +35,24 @@ class EmailTemplateController extends Controller
         $template->update($request->only('subject', 'body'));
 
         return redirect()->route('email-templates.index')->with('success', 'Template updated successfully.');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'template_type' => 'required|string',
+            'subject' => 'required|string|max:255',
+            'body' => 'required',
+        ]);
+
+        EmailTemplate::create($data);
+        return redirect()->route('email-templates.index')->with('success', 'Template created successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $template = EmailTemplate::findOrFail($id);
+        $template->delete();
+        return redirect()->route('email-templates.index')->with('success', 'Template deleted successfully.');
     }
 }

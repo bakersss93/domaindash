@@ -22,6 +22,7 @@
         <label for="body" class="block text-gray-700 font-bold mb-2">Body</label>
         <textarea name="body" id="body" rows="10" class="w-full border rounded px-4 py-2">{{ $template->body }}</textarea>
     </div>
+    <p class="text-sm text-gray-600 mb-4">Available placeholders: {{ '{customer_name}' }}, {{ '{domain_name}' }}, {{ '{renewal_date}' }}, {{ '{expiration_date}' }}, {{ '{disk_usage}' }}</p>
 
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save Changes</button>
 </form>

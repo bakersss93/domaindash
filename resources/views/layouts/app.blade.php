@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'DomainDash') }}</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body class="bg-gray-100">
@@ -20,6 +21,7 @@
                             <a href="{{ route('email-templates.index') }}" class="px-4">Email Templates</a>
                             <a href="{{ route('api-keys.index') }}" class="px-4">API Keys</a>
                         @endif
+                        <livewire:notification-bell />
                         <a href="{{ route('logout') }}" class="px-4">Logout</a>
                     @endauth
                 </nav>
@@ -34,5 +36,6 @@
             &copy; {{ date('Y') }} DomainDash. All rights reserved.
         </footer>
     </div>
+    @livewireScripts
 </body>
 </html>
