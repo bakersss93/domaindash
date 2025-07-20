@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmailTemplatesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
         Schema::create('email_templates', function (Blueprint $table) {
             $table->id();
-            $table->enum('template_type', ['domain_expiry', 'ssl_expiry', 'disk_space_warning']);
-            $table->string('subject');
+            $table->string('template_name');
+            $table->text('subject');
             $table->text('body');
             $table->timestamps();
         });
@@ -21,4 +21,4 @@ class CreateEmailTemplatesTable extends Migration
     {
         Schema::dropIfExists('email_templates');
     }
-}
+};
