@@ -26,5 +26,14 @@ class UserSeeder extends Seeder
             'role' => 'customer',
             'dark_mode' => false,
         ]);
+
+        User::create([
+            'first_name' => 'Tech',
+            'surname' => 'User',
+            'email' => 'technician@jargonconsulting.com.au',
+            'password' => bcrypt('tech'),
+            'role' => 'technician',
+            'dark_mode' => false,
+        ]);
     }
 }

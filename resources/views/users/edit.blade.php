@@ -25,6 +25,7 @@
         <label>Role</label>
         <select name="role" required>
             <option value="admin" @selected($user->role === 'admin')>Admin</option>
+            <option value="technician" @selected($user->role === 'technician')>Technician</option>
             <option value="customer" @selected($user->role === 'customer')>Customer</option>
         </select>
     </div>
