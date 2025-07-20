@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSmtpSettingsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -24,3 +24,4 @@ class CreateSmtpSettingsTable extends Migration
         Schema::dropIfExists('smtp_settings');
     }
 }
+;
