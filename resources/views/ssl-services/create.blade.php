@@ -9,11 +9,11 @@
         <input type="text" name="certificate_name" required>
     </div>
     <div>
-        <label>Customer</label>
-        <select name="customer_id">
+        <label>Client</label>
+        <select name="client_id">
             <option value="">None</option>
-            @foreach($customers as $customer)
-                <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->surname }}</option>
+            @foreach($clients as $client)
+                <option value="{{ $client->id }}">{{ $client->business_name }}</option>
             @endforeach
         </select>
     </div>

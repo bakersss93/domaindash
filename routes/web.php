@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 #Admin Only 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('clients', ClientController::class)->except(['show']);
     Route::resource('domains', DomainController::class)->except(['show']);
     Route::resource('hosting-services', HostingServiceController::class)->except(['show']);
     Route::resource('ssl-services', SSLServiceController::class)->except(['show']);

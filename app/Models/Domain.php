@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Client;
 
 class Domain extends Model
 {
@@ -11,13 +12,13 @@ class Domain extends Model
 
     protected $fillable = [
         'domain_name',
-        'customer_id',
+        'client_id',
         'auto_renew',
         'renewal_date',
     ];
 
-    public function customer()
+    public function client()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(Client::class);
     }
 }
