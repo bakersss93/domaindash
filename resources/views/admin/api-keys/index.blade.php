@@ -6,6 +6,13 @@
 <a href="{{ route('api-keys.create') }}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block">Create API Key</a>
 @endif
 
+@if(session('plainToken'))
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+    <p>Your new API token:</p>
+    <pre class="font-mono break-all">{{ session('plainToken') }}</pre>
+</div>
+@endif
+
 <table class="table-auto w-full border-collapse border border-gray-300">
     <thead>
         <tr>
