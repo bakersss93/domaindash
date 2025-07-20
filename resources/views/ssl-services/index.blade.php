@@ -7,7 +7,7 @@
     <thead>
         <tr>
             <th class="border border-gray-300 px-4 py-2">Certificate Name</th>
-            <th class="border border-gray-300 px-4 py-2">Customer</th>
+            <th class="border border-gray-300 px-4 py-2">Client</th>
             <th class="border border-gray-300 px-4 py-2">Expiration Date</th>
             <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
@@ -16,7 +16,7 @@
         @foreach ($sslServices as $ssl)
         <tr>
             <td class="border border-gray-300 px-4 py-2">{{ $ssl->certificate_name }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ optional($ssl->customer)->first_name }} {{ optional($ssl->customer)->surname }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ optional($ssl->client)->business_name }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $ssl->expiration_date }}</td>
             <td class="border border-gray-300 px-4 py-2">
                 <a href="{{ route('ssl-services.edit', $ssl->id) }}" class="text-blue-500">Edit</a>

@@ -11,7 +11,7 @@ class HostingServiceSeeder extends Seeder
     {
         HostingService::create([
             'service_name' => 'Basic Hosting',
-            'customer_id' => 2,
+            'client_id' => 1,
             'disk_usage' => 10,
             'database_usage' => 2,
             'disk_space_threshold' => 80,
@@ -20,7 +20,7 @@ class HostingServiceSeeder extends Seeder
 
         HostingService::create([
             'service_name' => 'Premium Hosting',
-            'customer_id' => 2,
+            'client_id' => 1,
             'disk_usage' => 50,
             'database_usage' => 10,
             'disk_space_threshold' => 80,

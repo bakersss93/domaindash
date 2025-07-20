@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Domain;
-use App\Models\User;
+use App\Models\Client;
 
 class DomainController extends Controller
 {
@@ -13,7 +13,7 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = Domain::with('customer')->get();
+        $domains = Domain::with('client')->get();
         return view('domains.index', compact('domains'));
     }
 
@@ -22,8 +22,8 @@ class DomainController extends Controller
      */
     public function create()
     {
-        $customers = User::all();
-        return view('domains.create', compact('customers'));
+        $clients = Client::all();
+        return view('domains.create', compact('clients'));
     }
 
     /**
@@ -33,7 +33,7 @@ class DomainController extends Controller
     {
         $data = $request->validate([
             'domain_name' => 'required|string|max:255',
-            'customer_id' => 'nullable|exists:users,id',
+            'client_id' => 'nullable|exists:clients,id',
             'auto_renew' => 'boolean',
             'renewal_date' => 'nullable|date',
         ]);
@@ -57,8 +57,8 @@ class DomainController extends Controller
     public function edit(string $id)
     {
         $domain = Domain::findOrFail($id);
-        $customers = User::all();
-        return view('domains.edit', compact('domain', 'customers'));
+        $clients = Client::all();
+        return view('domains.edit', compact('domain', 'clients'));
     }
 
     /**
@@ -68,7 +68,7 @@ class DomainController extends Controller
     {
         $data = $request->validate([
             'domain_name' => 'required|string|max:255',
-            'customer_id' => 'nullable|exists:users,id',
+            'client_id' => 'nullable|exists:clients,id',
             'auto_renew' => 'boolean',
             'renewal_date' => 'nullable|date',
         ]);

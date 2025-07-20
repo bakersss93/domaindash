@@ -11,7 +11,7 @@ class CreateDomainsTable extends Migration
         Schema::create('domains', function (Blueprint $table) {
             $table->id();
             $table->string('domain_name');
-            $table->foreignId('customer_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('client_id')->nullable()->constrained('clients')->onDelete('set null');
             $table->boolean('auto_renew')->default(true);
             $table->date('renewal_date')->nullable();
             $table->timestamps();

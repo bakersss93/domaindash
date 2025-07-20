@@ -10,8 +10,9 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        // Fetch domains assigned to the logged-in customer
-        $domains = Domain::where('customer_id', auth()->id())->get();
+        // Fetch domains assigned to any of the customer's clients
+        $clientIds = auth()->user()->clients()->pluck('clients.id');
+        $domains = Domain::whereIn('client_id', $clientIds)->get();
 
         return view('customer.dashboard', compact('domains'));
     }
@@ -20,7 +21,8 @@ class CustomerController extends Controller
     {
         // Search within the logged-in customer's domains
         $query = $request->input('query');
-        $domains = Domain::where('customer_id', auth()->id())
+        $clientIds = auth()->user()->clients()->pluck('clients.id');
+        $domains = Domain::whereIn('client_id', $clientIds)
                          ->where('domain_name', 'LIKE', '%' . $query . '%')
                          ->get();
 

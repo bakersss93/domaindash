@@ -11,13 +11,13 @@ class SSLService extends Model
 
     protected $fillable = [
         'certificate_name',
-        'customer_id',
+        'client_id',
         'expiration_date',
         'details',
     ];
 
-    public function customer()
+    public function client()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 }
