@@ -22,7 +22,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('notifications', NotificationController::class)->only(['index']);
     Route::resource('backup-settings', BackupSettingController::class)->only(['edit', 'update']);
     Route::resource('smtp-settings', SMTPSettingController::class)->only(['edit', 'update']);
-    Route::resource('api-keys', ApiKeyController::class);
+    Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
 });
