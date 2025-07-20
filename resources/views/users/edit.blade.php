@@ -28,6 +28,16 @@
             <option value="customer" @selected($user->role === 'customer')>Customer</option>
         </select>
     </div>
+    <div>
+        <label>Clients</label>
+        <select name="client_ids[]" multiple class="border">
+            @foreach ($customers as $customer)
+                <option value="{{ $customer->id }}" @selected($user->clients->contains($customer->id))>
+                    {{ $customer->first_name }} {{ $customer->surname }}
+                </option>
+            @endforeach
+        </select>
+    </div>
     <button type="submit">Update</button>
 </form>
 @endsection

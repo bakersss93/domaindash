@@ -11,9 +11,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $query = User::query();
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('surname', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($role = $request->input('role')) {
+            $query->where('role', $role);
+        }
+
+        $users = $query->with('clients')->get();
+
         return view('users.index', compact('users'));
     }
 
@@ -22,7 +37,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $customers = User::where('role', 'customer')->get();
+        return view('users.create', compact('customers'));
     }
 
     /**
@@ -40,7 +56,11 @@ class UserController extends Controller
 
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
+
+        if ($request->has('client_ids')) {
+            $user->clients()->sync($request->input('client_ids'));
+        }
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -58,8 +78,9 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::findOrFail($id);
-        return view('users.edit', compact('user'));
+        $user = User::with('clients')->findOrFail($id);
+        $customers = User::where('role', 'customer')->get();
+        return view('users.edit', compact('user', 'customers'));
     }
 
     /**
@@ -85,6 +106,10 @@ class UserController extends Controller
 
         $user->update($data);
 
+        if ($request->has('client_ids')) {
+            $user->clients()->sync($request->input('client_ids'));
+        }
+
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
@@ -97,5 +122,32 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function impersonate(string $id)
+    {
+        $user = User::findOrFail($id);
+        auth()->login($user);
+
+        return redirect()->route('dashboard')->with('success', 'Impersonation started.');
+    }
+
+    public function resetPassword(string $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['password' => Hash::make('password')]);
+
+        return back()->with('success', 'Password reset.');
+    }
+
+    public function resetMfa(string $id)
+    {
+        $user = User::findOrFail($id);
+        $user->forceFill([
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+        ])->save();
+
+        return back()->with('success', 'MFA reset.');
     }
 }

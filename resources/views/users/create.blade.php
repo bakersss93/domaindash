@@ -27,6 +27,14 @@
             <option value="customer">Customer</option>
         </select>
     </div>
+    <div>
+        <label>Clients</label>
+        <select name="client_ids[]" multiple class="border">
+            @foreach ($customers as $customer)
+                <option value="{{ $customer->id }}">{{ $customer->first_name }} {{ $customer->surname }}</option>
+            @endforeach
+        </select>
+    </div>
     <button type="submit">Create</button>
 </form>
 @endsection

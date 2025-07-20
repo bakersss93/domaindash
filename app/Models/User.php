@@ -24,9 +24,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'surname',
         'email',
         'password',
+        'role',
+        'dark_mode',
     ];
 
     /**
@@ -58,4 +61,19 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getNameAttribute(): string
+    {
+        return $this->first_name.' '.$this->surname;
+    }
+
+    public function clients()
+    {
+        return $this->belongsToMany(User::class, 'client_user', 'admin_id', 'client_id');
+    }
+
+    public function admins()
+    {
+        return $this->belongsToMany(User::class, 'client_user', 'client_id', 'admin_id');
+    }
 }
