@@ -9,6 +9,8 @@ class SMTPSetting extends Model
 {
     use HasFactory;
 
+    protected $table = 'smtp_settings';
+
     protected $fillable = [
         'send_from_email',
         'smtp_server',
