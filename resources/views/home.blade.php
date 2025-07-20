@@ -20,6 +20,11 @@
             <p>Manage API keys for third-party integrations.</p>
             <a href="{{ route('api-keys.index') }}" class="text-blue-500">Go to API Keys</a>
         </div>
+        <div class="bg-white shadow rounded p-4">
+            <h2 class="text-xl font-bold">Disk Settings</h2>
+            <p>Configure disk usage warning threshold.</p>
+            <a href="{{ route('disk-settings.edit') }}" class="text-blue-500">Edit Disk Settings</a>
+        </div>
     @endif
 
     @if(auth()->user()->role === 'customer')

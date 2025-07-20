@@ -20,7 +20,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('ssl-services', SSLServiceController::class)->except(['show']);
     Route::resource('email-templates', EmailTemplateController::class)->except(['show']);
     Route::resource('notifications', NotificationController::class)->only(['index']);
+    Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::resource('backup-settings', BackupSettingController::class)->only(['edit', 'update']);
+    Route::resource('disk-settings', DiskSettingController::class)->only(['edit', 'update']);
     Route::resource('smtp-settings', SMTPSettingController::class)->only(['edit', 'update']);
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');

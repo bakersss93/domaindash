@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         ApiKeySeeder::class,
         EmailTemplateSeeder::class,
         BackupSettingSeeder::class,
+        DiskSettingSeeder::class,
         NotificationSeeder::class,
         SMTPSettingSeeder::class,
         SystemMetricSeeder::class,
