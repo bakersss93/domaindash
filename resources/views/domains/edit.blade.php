@@ -26,6 +26,10 @@
         <label>Auto Renew</label>
         <input type="checkbox" name="auto_renew" value="1" @checked($domain->auto_renew)>
     </div>
+    <div>
+        <label>DNS Records (JSON)</label>
+        <textarea name="dns_records" rows="5" class="w-full">{{ json_encode($domain->dns_records, JSON_PRETTY_PRINT) }}</textarea>
+    </div>
     <button type="submit">Update</button>
 </form>
 @endsection

@@ -12,10 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-#Admin Only 
+#Admin Only
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
-    Route::resource('domains', DomainController::class)->except(['show']);
     Route::resource('hosting-services', HostingServiceController::class)->except(['show']);
     Route::resource('ssl-services', SSLServiceController::class)->except(['show']);
     Route::resource('email-templates', EmailTemplateController::class)->except(['show']);
@@ -25,6 +24,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
+});
+
+Route::middleware(['auth', 'role:admin|technician'])->group(function () {
+    Route::resource('domains', DomainController::class)->except(['show']);
+    Route::post('domains/bulk-update', [\App\Http\Controllers\Admin\DomainController::class, 'bulkUpdateDomains'])->name('domains.bulk-update');
+    Route::post('domains/check', [\App\Http\Controllers\Admin\DomainController::class, 'checkAvailability'])->name('domains.check');
+    Route::post('domains/{domain}/transfer', [\App\Http\Controllers\Admin\DomainController::class, 'initiateTransfer'])->name('domains.transfer');
+    Route::post('domains/{domain}/renew', [\App\Http\Controllers\Admin\DomainController::class, 'renew'])->name('domains.renew');
 });
 #Customer
 Route::middleware(['auth', 'role:customer'])->group(function () {

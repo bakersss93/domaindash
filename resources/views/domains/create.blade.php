@@ -25,6 +25,10 @@
         <label>Auto Renew</label>
         <input type="checkbox" name="auto_renew" value="1" checked>
     </div>
+    <div>
+        <label>DNS Records (JSON)</label>
+        <textarea name="dns_records" rows="5" class="w-full">{{ old('dns_records') }}</textarea>
+    </div>
     <button type="submit">Create</button>
 </form>
 @endsection

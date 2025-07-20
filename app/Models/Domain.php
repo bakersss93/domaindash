@@ -14,6 +14,11 @@ class Domain extends Model
         'customer_id',
         'auto_renew',
         'renewal_date',
+        'dns_records',
+    ];
+
+    protected $casts = [
+        'dns_records' => 'array',
     ];
 
     public function customer()

@@ -36,7 +36,10 @@ class DomainController extends Controller
             'customer_id' => 'nullable|exists:users,id',
             'auto_renew' => 'boolean',
             'renewal_date' => 'nullable|date',
+            'dns_records' => 'nullable|string',
         ]);
+
+        $data['dns_records'] = $data['dns_records'] ? json_decode($data['dns_records'], true) : null;
 
         Domain::create($data);
 
@@ -71,7 +74,10 @@ class DomainController extends Controller
             'customer_id' => 'nullable|exists:users,id',
             'auto_renew' => 'boolean',
             'renewal_date' => 'nullable|date',
+            'dns_records' => 'nullable|string',
         ]);
+
+        $data['dns_records'] = $data['dns_records'] ? json_decode($data['dns_records'], true) : null;
 
         $domain = Domain::findOrFail($id);
         $domain->update($data);

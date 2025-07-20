@@ -13,11 +13,13 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string $roles): Response
     {
         $user = $request->user();
 
-        if (! $user || $user->role !== $role) {
+        $allowed = explode('|', $roles);
+
+        if (! $user || ! in_array($user->role, $allowed, true)) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
