@@ -8,16 +8,17 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('system_metrics', function (Blueprint $table) {
+        Schema::create('access_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('metric_name');
-            $table->string('metric_value');
+            $table->foreignId('api_key_id')->constrained('api_keys')->onDelete('cascade');
+            $table->string('endpoint');
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('system_metrics');
+        Schema::dropIfExists('access_logs');
     }
 };

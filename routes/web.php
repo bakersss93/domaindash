@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-#Admin Only 
+Route::get('/', fn () => 'home')->name('home');
+#Admin Only
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('domains', DomainController::class)->except(['show']);
