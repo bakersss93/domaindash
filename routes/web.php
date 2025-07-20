@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 #Admin Only 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('users', UserController::class);
-    Route::resource('domains', DomainController::class);
-    Route::resource('hosting-services', HostingServiceController::class);
-    Route::resource('ssl-services', SSLServiceController::class);
+    Route::resource('users', UserController::class)->except(['show']);
+    Route::resource('domains', DomainController::class)->except(['show']);
+    Route::resource('hosting-services', HostingServiceController::class)->except(['show']);
+    Route::resource('ssl-services', SSLServiceController::class)->except(['show']);
     Route::resource('email-templates', EmailTemplateController::class)->except(['show']);
     Route::resource('notifications', NotificationController::class)->only(['index']);
     Route::resource('backup-settings', BackupSettingController::class)->only(['edit', 'update']);

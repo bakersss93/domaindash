@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SSLService;
+use App\Models\User;
 
 class SSLServiceController extends Controller
 {
@@ -11,7 +13,8 @@ class SSLServiceController extends Controller
      */
     public function index()
     {
-        //
+        $sslServices = SSLService::with('customer')->get();
+        return view('ssl-services.index', compact('sslServices'));
     }
 
     /**
@@ -19,7 +22,8 @@ class SSLServiceController extends Controller
      */
     public function create()
     {
-        //
+        $customers = User::all();
+        return view('ssl-services.create', compact('customers'));
     }
 
     /**
@@ -27,7 +31,16 @@ class SSLServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'certificate_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'expiration_date' => 'required|date',
+            'details' => 'nullable|string',
+        ]);
+
+        SSLService::create($data);
+
+        return redirect()->route('ssl-services.index')->with('success', 'SSL service created successfully.');
     }
 
     /**
@@ -43,7 +56,9 @@ class SSLServiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $sslService = SSLService::findOrFail($id);
+        $customers = User::all();
+        return view('ssl-services.edit', compact('sslService', 'customers'));
     }
 
     /**
@@ -51,7 +66,17 @@ class SSLServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'certificate_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'expiration_date' => 'required|date',
+            'details' => 'nullable|string',
+        ]);
+
+        $sslService = SSLService::findOrFail($id);
+        $sslService->update($data);
+
+        return redirect()->route('ssl-services.index')->with('success', 'SSL service updated successfully.');
     }
 
     /**
@@ -59,6 +84,9 @@ class SSLServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $sslService = SSLService::findOrFail($id);
+        $sslService->delete();
+
+        return redirect()->route('ssl-services.index')->with('success', 'SSL service deleted successfully.');
     }
 }

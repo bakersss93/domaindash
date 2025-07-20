@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Domain;
+use App\Models\User;
 
 class DomainController extends Controller
 {
@@ -11,7 +13,8 @@ class DomainController extends Controller
      */
     public function index()
     {
-        //
+        $domains = Domain::with('customer')->get();
+        return view('domains.index', compact('domains'));
     }
 
     /**
@@ -19,7 +22,8 @@ class DomainController extends Controller
      */
     public function create()
     {
-        //
+        $customers = User::all();
+        return view('domains.create', compact('customers'));
     }
 
     /**
@@ -27,7 +31,16 @@ class DomainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'domain_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'auto_renew' => 'boolean',
+            'renewal_date' => 'nullable|date',
+        ]);
+
+        Domain::create($data);
+
+        return redirect()->route('domains.index')->with('success', 'Domain created successfully.');
     }
 
     /**
@@ -43,7 +56,9 @@ class DomainController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $domain = Domain::findOrFail($id);
+        $customers = User::all();
+        return view('domains.edit', compact('domain', 'customers'));
     }
 
     /**
@@ -51,7 +66,17 @@ class DomainController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'domain_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'auto_renew' => 'boolean',
+            'renewal_date' => 'nullable|date',
+        ]);
+
+        $domain = Domain::findOrFail($id);
+        $domain->update($data);
+
+        return redirect()->route('domains.index')->with('success', 'Domain updated successfully.');
     }
 
     /**
@@ -59,6 +84,9 @@ class DomainController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $domain = Domain::findOrFail($id);
+        $domain->delete();
+
+        return redirect()->route('domains.index')->with('success', 'Domain deleted successfully.');
     }
 }

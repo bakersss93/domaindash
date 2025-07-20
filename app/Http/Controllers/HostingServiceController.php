@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\HostingService;
+use App\Models\User;
 
 class HostingServiceController extends Controller
 {
@@ -11,7 +13,8 @@ class HostingServiceController extends Controller
      */
     public function index()
     {
-        //
+        $hostingServices = HostingService::with('customer')->get();
+        return view('hosting-services.index', compact('hostingServices'));
     }
 
     /**
@@ -19,7 +22,8 @@ class HostingServiceController extends Controller
      */
     public function create()
     {
-        //
+        $customers = User::all();
+        return view('hosting-services.create', compact('customers'));
     }
 
     /**
@@ -27,7 +31,18 @@ class HostingServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'service_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'disk_usage' => 'nullable|integer',
+            'database_usage' => 'nullable|integer',
+            'disk_space_threshold' => 'nullable|integer',
+            'hosting_plan' => 'required|string',
+        ]);
+
+        HostingService::create($data);
+
+        return redirect()->route('hosting-services.index')->with('success', 'Hosting service created successfully.');
     }
 
     /**
@@ -43,7 +58,9 @@ class HostingServiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $hostingService = HostingService::findOrFail($id);
+        $customers = User::all();
+        return view('hosting-services.edit', compact('hostingService', 'customers'));
     }
 
     /**
@@ -51,7 +68,19 @@ class HostingServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'service_name' => 'required|string|max:255',
+            'customer_id' => 'nullable|exists:users,id',
+            'disk_usage' => 'nullable|integer',
+            'database_usage' => 'nullable|integer',
+            'disk_space_threshold' => 'nullable|integer',
+            'hosting_plan' => 'required|string',
+        ]);
+
+        $hostingService = HostingService::findOrFail($id);
+        $hostingService->update($data);
+
+        return redirect()->route('hosting-services.index')->with('success', 'Hosting service updated successfully.');
     }
 
     /**
@@ -59,6 +88,9 @@ class HostingServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $hostingService = HostingService::findOrFail($id);
+        $hostingService->delete();
+
+        return redirect()->route('hosting-services.index')->with('success', 'Hosting service deleted successfully.');
     }
 }
