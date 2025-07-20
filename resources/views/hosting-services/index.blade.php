@@ -26,6 +26,12 @@
                     @method('DELETE')
                     <button type="submit" class="text-red-500">Delete</button>
                 </form>
+                @php
+                    $cpanelRoute = auth()->user()->role === 'admin'
+                        ? route('hosting-services.cpanel', $service->id)
+                        : route('customer.hosting.cpanel', $service->id);
+                @endphp
+                <a href="{{ $cpanelRoute }}" class="text-green-500 ml-2">cPanel Login</a>
             </td>
         </tr>
         @endforeach
