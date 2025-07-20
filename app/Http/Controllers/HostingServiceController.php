@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\HostingService;
-use App\Models\User;
+use App\Models\Client;
 
 class HostingServiceController extends Controller
 {
@@ -13,7 +13,7 @@ class HostingServiceController extends Controller
      */
     public function index()
     {
-        $hostingServices = HostingService::with('customer')->get();
+        $hostingServices = HostingService::with('client')->get();
         return view('hosting-services.index', compact('hostingServices'));
     }
 
@@ -22,8 +22,8 @@ class HostingServiceController extends Controller
      */
     public function create()
     {
-        $customers = User::all();
-        return view('hosting-services.create', compact('customers'));
+        $clients = Client::all();
+        return view('hosting-services.create', compact('clients'));
     }
 
     /**
@@ -33,7 +33,7 @@ class HostingServiceController extends Controller
     {
         $data = $request->validate([
             'service_name' => 'required|string|max:255',
-            'customer_id' => 'nullable|exists:users,id',
+            'client_id' => 'nullable|exists:clients,id',
             'disk_usage' => 'nullable|integer',
             'database_usage' => 'nullable|integer',
             'disk_space_threshold' => 'nullable|integer',
@@ -59,8 +59,8 @@ class HostingServiceController extends Controller
     public function edit(string $id)
     {
         $hostingService = HostingService::findOrFail($id);
-        $customers = User::all();
-        return view('hosting-services.edit', compact('hostingService', 'customers'));
+        $clients = Client::all();
+        return view('hosting-services.edit', compact('hostingService', 'clients'));
     }
 
     /**
@@ -70,7 +70,7 @@ class HostingServiceController extends Controller
     {
         $data = $request->validate([
             'service_name' => 'required|string|max:255',
-            'customer_id' => 'nullable|exists:users,id',
+            'client_id' => 'nullable|exists:clients,id',
             'disk_usage' => 'nullable|integer',
             'database_usage' => 'nullable|integer',
             'disk_space_threshold' => 'nullable|integer',

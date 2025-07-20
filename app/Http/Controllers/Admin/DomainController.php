@@ -36,7 +36,7 @@ class DomainController extends Controller
                 Domain::updateOrCreate(
                     ['domain_name' => $domainData['domainName']],
                     [
-                        'customer_id' => null,
+                        'client_id' => null,
                         'auto_renew' => $domainData['autoRenew'] ?? null,
                         'renewal_date' => $domainData['domain_expiry'] ?? null,
                         'transfer_status' => $domainData['transfer_status'] ?? null,
