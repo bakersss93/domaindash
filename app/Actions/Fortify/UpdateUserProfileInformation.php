@@ -18,8 +18,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'dark_mode' => ['nullable', 'boolean'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
 
@@ -32,8 +34,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill([
-                'name' => $input['name'],
+                'first_name' => $input['first_name'],
+                'surname' => $input['surname'],
                 'email' => $input['email'],
+                'dark_mode' => $input['dark_mode'] ?? $user->dark_mode,
             ])->save();
         }
     }
@@ -46,8 +50,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     protected function updateVerifiedUser(User $user, array $input): void
     {
         $user->forceFill([
-            'name' => $input['name'],
+            'first_name' => $input['first_name'],
+            'surname' => $input['surname'],
             'email' => $input['email'],
+            'dark_mode' => $input['dark_mode'] ?? $user->dark_mode,
             'email_verified_at' => null,
         ])->save();
 
