@@ -23,8 +23,9 @@
     <div>
         <label>Role</label>
         <select name="role" required>
-            <option value="admin">Admin</option>
-            <option value="customer">Customer</option>
+            <option value="Administrator">Administrator</option>
+            <option value="Technician">Technician</option>
+            <option value="Customer">Customer</option>
         </select>
     </div>
     <button type="submit">Create</button>

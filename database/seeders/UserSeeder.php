@@ -9,22 +9,22 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
+        $admin = User::create([
             'first_name' => 'Admin',
             'surname' => 'User',
             'email' => 'admin@jargonconsulting.com.au',
             'password' => bcrypt('admin'),
-            'role' => 'admin',
             'dark_mode' => false,
         ]);
+        $admin->assignRole('Administrator');
 
-        User::create([
+        $customer = User::create([
             'first_name' => 'Customer',
             'surname' => 'User',
             'email' => 'customer@jargonconsulting.com.au',
             'password' => bcrypt('password'),
-            'role' => 'customer',
             'dark_mode' => false,
         ]);
+        $customer->assignRole('Customer');
     }
 }

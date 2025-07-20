@@ -15,7 +15,7 @@
                 <nav>
                     @auth
                         <a href="{{ route('home') }}" class="px-4">Home</a>
-                        @if(auth()->user()->role === 'admin')
+                        @if(auth()->user()->can('manage users'))
                             <a href="{{ route('users.index') }}" class="px-4">Users</a>
                             <a href="{{ route('email-templates.index') }}" class="px-4">Email Templates</a>
                             <a href="{{ route('api-keys.index') }}" class="px-4">API Keys</a>

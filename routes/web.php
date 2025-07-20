@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-#Admin Only 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+#Admin Only
+Route::middleware(['auth', 'role:manage users'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('domains', DomainController::class)->except(['show']);
     Route::resource('hosting-services', HostingServiceController::class)->except(['show']);
@@ -27,7 +27,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
 });
 #Customer
-Route::middleware(['auth', 'role:customer'])->group(function () {
+Route::middleware(['auth', 'role:access customer area'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('domains', [DomainController::class, 'index'])->name('customer.domains.index');
     Route::get('hosting-services', [HostingServiceController::class, 'index'])->name('customer.hosting.index');

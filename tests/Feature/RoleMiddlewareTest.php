@@ -5,20 +5,25 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoleMiddlewareTest extends TestCase
 {
+    use RefreshDatabase;
     protected function setUp(): void
     {
         parent::setUp();
 
-        Route::middleware('role:admin')->get('/admin-only', fn () => 'admin');
-        Route::middleware('role:customer')->get('/customer-only', fn () => 'customer');
+        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+
+        Route::middleware('role:manage users')->get('/admin-only', fn () => 'admin');
+        Route::middleware('role:access customer area')->get('/customer-only', fn () => 'customer');
     }
 
     public function test_admin_can_access_admin_route(): void
     {
-        $user = User::factory()->make(['id' => 1, 'role' => 'admin']);
+        $user = User::factory()->create();
+        $user->givePermissionTo('manage users');
         $this->actingAs($user);
 
         $this->get('/admin-only')->assertOk();
@@ -26,7 +31,8 @@ class RoleMiddlewareTest extends TestCase
 
     public function test_customer_cannot_access_admin_route(): void
     {
-        $user = User::factory()->make(['id' => 1, 'role' => 'customer']);
+        $user = User::factory()->create();
+        $user->givePermissionTo('access customer area');
         $this->actingAs($user);
 
         $this->get('/admin-only')->assertForbidden();
@@ -39,7 +45,8 @@ class RoleMiddlewareTest extends TestCase
 
     public function test_customer_can_access_customer_route(): void
     {
-        $user = User::factory()->make(['id' => 1, 'role' => 'customer']);
+        $user = User::factory()->create();
+        $user->givePermissionTo('access customer area');
         $this->actingAs($user);
 
         $this->get('/customer-only')->assertOk();
@@ -47,7 +54,8 @@ class RoleMiddlewareTest extends TestCase
 
     public function test_admin_cannot_access_customer_route(): void
     {
-        $user = User::factory()->make(['id' => 1, 'role' => 'admin']);
+        $user = User::factory()->create();
+        $user->givePermissionTo('manage users');
         $this->actingAs($user);
 
         $this->get('/customer-only')->assertForbidden();

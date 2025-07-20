@@ -4,7 +4,7 @@
 <h1 class="text-2xl font-bold mb-4">Welcome, {{ auth()->user()->first_name }}</h1>
 
 <div class="grid grid-cols-2 gap-6">
-    @if(auth()->user()->role === 'admin')
+    @if(auth()->user()->can('manage users'))
         <div class="bg-white shadow rounded p-4">
             <h2 class="text-xl font-bold">Users</h2>
             <p>Manage platform users and their roles.</p>
@@ -22,7 +22,7 @@
         </div>
     @endif
 
-    @if(auth()->user()->role === 'customer')
+    @if(auth()->user()->hasRole('Customer'))
         <div class="bg-white shadow rounded p-4">
             <h2 class="text-xl font-bold">My Domains</h2>
             <p>View and manage your assigned domains.</p>

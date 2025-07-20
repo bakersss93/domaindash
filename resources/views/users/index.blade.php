@@ -2,7 +2,7 @@
 
 @section('content')
 <h1 class="text-2xl font-bold mb-4">Manage Users</h1>
-@if(auth()->user()->role === 'admin')
+@if(auth()->user()->can('manage users'))
 <a href="{{ route('users.create') }}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block">Create New User</a>
 @endif
 
@@ -12,7 +12,7 @@
             <th class="border border-gray-300 px-4 py-2">Name</th>
             <th class="border border-gray-300 px-4 py-2">Email</th>
             <th class="border border-gray-300 px-4 py-2">Role</th>
-            @if(auth()->user()->role === 'admin')
+            @if(auth()->user()->can('manage users'))
             <th class="border border-gray-300 px-4 py-2">Actions</th>
             @endif
         </tr>
@@ -22,8 +22,8 @@
         <tr>
             <td class="border border-gray-300 px-4 py-2">{{ $user->first_name }} {{ $user->surname }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $user->role }}</td>
-            @if(auth()->user()->role === 'admin')
+            <td class="border border-gray-300 px-4 py-2">{{ $user->getRoleNames()->first() }}</td>
+            @if(auth()->user()->can('manage users'))
             <td class="border border-gray-300 px-4 py-2">
                 <a href="{{ route('users.edit', $user->id) }}" class="text-blue-500">Edit</a>
                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">

@@ -2,7 +2,7 @@
 
 @section('content')
 <h1 class="text-2xl font-bold mb-4">API Keys</h1>
-@if(auth()->user()->role === 'admin')
+@if(auth()->user()->can('manage users'))
 <a href="{{ route('api-keys.create') }}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block">Create API Key</a>
 @endif
 
@@ -19,7 +19,7 @@
             <th class="border border-gray-300 px-4 py-2">Name</th>
             <th class="border border-gray-300 px-4 py-2">Permissions</th>
             <th class="border border-gray-300 px-4 py-2">Allowed IPs</th>
-            @if(auth()->user()->role === 'admin')
+            @if(auth()->user()->can('manage users'))
             <th class="border border-gray-300 px-4 py-2">Actions</th>
             @endif
         </tr>
@@ -30,7 +30,7 @@
             <td class="border border-gray-300 px-4 py-2">{{ $key->key_name }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $key->permissions }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $key->allowed_ips }}</td>
-            @if(auth()->user()->role === 'admin')
+            @if(auth()->user()->can('manage users'))
             <td class="border border-gray-300 px-4 py-2">
                 <form action="{{ route('api-keys.destroy', $key->id) }}" method="POST" style="display:inline;">
                     @csrf

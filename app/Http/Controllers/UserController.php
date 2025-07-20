@@ -35,12 +35,13 @@ class UserController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,customer',
+            'role' => 'required|in:Administrator,Technician,Customer',
         ]);
 
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
+        $user->assignRole($data['role']);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
@@ -74,7 +75,7 @@ class UserController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
-            'role' => 'required|in:admin,customer',
+            'role' => 'required|in:Administrator,Technician,Customer',
         ]);
 
         if ($request->filled('password')) {
@@ -84,6 +85,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
+        $user->syncRoles([$data['role']]);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }

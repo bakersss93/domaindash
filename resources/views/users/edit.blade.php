@@ -24,8 +24,9 @@
     <div>
         <label>Role</label>
         <select name="role" required>
-            <option value="admin" @selected($user->role === 'admin')>Admin</option>
-            <option value="customer" @selected($user->role === 'customer')>Customer</option>
+            <option value="Administrator" @selected($user->getRoleNames()->first() === 'Administrator')>Administrator</option>
+            <option value="Technician" @selected($user->getRoleNames()->first() === 'Technician')>Technician</option>
+            <option value="Customer" @selected($user->getRoleNames()->first() === 'Customer')>Customer</option>
         </select>
     </div>
     <button type="submit">Update</button>
