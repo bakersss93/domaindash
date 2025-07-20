@@ -24,9 +24,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'surname',
         'email',
         'password',
+        'role',
+        'dark_mode',
     ];
 
     /**
@@ -48,6 +51,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'dark_mode' => 'boolean',
     ];
 
     /**
@@ -58,4 +62,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function getNameAttribute(): string
+    {
+        return trim($this->first_name.' '.$this->surname);
+    }
 }

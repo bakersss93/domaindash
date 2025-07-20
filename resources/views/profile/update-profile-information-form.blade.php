@@ -52,11 +52,35 @@
             </div>
         @endif
 
-        <!-- Name -->
+        <!-- First Name -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Name') }}" />
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
-            <x-input-error for="name" class="mt-2" />
+            <x-label for="first_name" value="{{ __('First Name') }}" />
+            <x-input id="first_name" type="text" class="mt-1 block w-full" wire:model="state.first_name" required />
+            <x-input-error for="first_name" class="mt-2" />
+        </div>
+
+        <!-- Surname -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="surname" value="{{ __('Surname') }}" />
+            <x-input id="surname" type="text" class="mt-1 block w-full" wire:model="state.surname" required />
+            <x-input-error for="surname" class="mt-2" />
+        </div>
+
+        <!-- Role -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="role" value="{{ __('Role') }}" />
+            <select id="role" wire:model="state.role" class="mt-1 block w-full">
+                <option value="admin">Admin</option>
+                <option value="customer">Customer</option>
+            </select>
+            <x-input-error for="role" class="mt-2" />
+        </div>
+
+        <!-- Dark Mode -->
+        <div class="col-span-6 sm:col-span-4 flex items-center">
+            <x-checkbox id="dark_mode" wire:model="state.dark_mode" class="me-2" />
+            <x-label for="dark_mode" value="{{ __('Dark Mode') }}" />
+            <x-input-error for="dark_mode" class="mt-2" />
         </div>
 
         <!-- Email -->

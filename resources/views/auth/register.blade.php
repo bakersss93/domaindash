@@ -10,8 +10,13 @@
             @csrf
 
             <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-label for="first_name" value="{{ __('First Name') }}" />
+                <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="surname" value="{{ __('Surname') }}" />
+                <x-input id="surname" class="block mt-1 w-full" type="text" name="surname" :value="old('surname')" required />
             </div>
 
             <div class="mt-4">
@@ -22,6 +27,19 @@
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="role" value="{{ __('Role') }}" />
+                <select id="role" name="role" class="block mt-1 w-full" required>
+                    <option value="admin">Admin</option>
+                    <option value="customer" selected>Customer</option>
+                </select>
+            </div>
+
+            <div class="mt-4 flex items-center">
+                <x-checkbox id="dark_mode" name="dark_mode" class="me-2" />
+                <x-label for="dark_mode" value="{{ __('Dark Mode') }}" />
             </div>
 
             <div class="mt-4">
