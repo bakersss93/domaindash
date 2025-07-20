@@ -6,6 +6,7 @@
     <title>{{ config('app.name', 'DomainDash') }}</title>
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <script src="{{ mix('js/app.js') }}" defer></script>
+    @livewireStyles
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen flex flex-col">
@@ -34,5 +35,6 @@
             &copy; {{ date('Y') }} DomainDash. All rights reserved.
         </footer>
     </div>
+    @livewireScripts
 </body>
 </html>

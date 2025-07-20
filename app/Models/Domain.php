@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\DnsRecord;
 
 class Domain extends Model
 {
@@ -19,5 +21,10 @@ class Domain extends Model
     public function customer()
     {
         return $this->belongsTo(User::class, 'customer_id');
+    }
+
+    public function dnsRecords()
+    {
+        return $this->hasMany(DnsRecord::class);
     }
 }

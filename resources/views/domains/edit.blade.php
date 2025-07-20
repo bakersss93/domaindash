@@ -28,4 +28,8 @@
     </div>
     <button type="submit">Update</button>
 </form>
+
+<div class="mt-6">
+    @livewire('dns-records', ['domain' => $domain])
+</div>
 @endsection
