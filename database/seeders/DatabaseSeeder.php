@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         BackupSettingSeeder::class,
         NotificationSeeder::class,
         SMTPSettingSeeder::class,
+        SettingSeeder::class,
         SystemMetricSeeder::class,
     ]);
 }

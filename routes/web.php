@@ -22,10 +22,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('notifications', NotificationController::class)->only(['index']);
     Route::resource('backup-settings', BackupSettingController::class)->only(['edit', 'update']);
     Route::resource('smtp-settings', SMTPSettingController::class)->only(['edit', 'update']);
+    Route::resource('settings', SettingController::class)->only(['edit', 'update']);
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
 });
+#Toggle dark mode for any authenticated user
+Route::middleware('auth')->post('dark-mode', [DarkModeController::class, 'toggle'])->name('dark-mode.toggle');
 #Customer
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
