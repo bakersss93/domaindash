@@ -50,3 +50,16 @@ php artisan test
 ```
 
 This command will run all tests defined in the `tests` directory.
+
+## OAuth 2.0
+
+DomainDash ships with [Laravel Passport](https://laravel.com/docs/passport) to
+provide OAuth 2.0 authentication for third‑party integrations such as Rewst.
+After installing the PHP dependencies run:
+
+```bash
+php artisan passport:install
+```
+
+This will generate the encryption keys and database entries required for issuing
+access tokens.

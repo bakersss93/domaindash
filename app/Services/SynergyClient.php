@@ -40,9 +40,17 @@ class SynergyClient
         return $this->request('BulkDomainInfo', $params);
     }
 
+    public function checkDomainAvailability(string $domain)
+    {
+        return $this->request('CheckDomain', ['domainName' => $domain]);
+    }
+
     public function __call(string $name, array $arguments)
     {
         $params = $arguments[0] ?? [];
+        if (!is_array($params)) {
+            $params = [$params];
+        }
         return $this->request($name, $params);
     }
 }

@@ -31,7 +31,8 @@
             <td class="border border-gray-300 px-4 py-2">{{ $key->permissions }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $key->allowed_ips }}</td>
             @if(auth()->user()->role === 'admin')
-            <td class="border border-gray-300 px-4 py-2">
+            <td class="border border-gray-300 px-4 py-2 space-x-2">
+                <a href="{{ route('api-keys.edit', $key->id) }}" class="text-blue-500">Edit</a>
                 <form action="{{ route('api-keys.destroy', $key->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')

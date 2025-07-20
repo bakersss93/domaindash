@@ -22,7 +22,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('notifications', NotificationController::class)->only(['index']);
     Route::resource('backup-settings', BackupSettingController::class)->only(['edit', 'update']);
     Route::resource('smtp-settings', SMTPSettingController::class)->only(['edit', 'update']);
-    Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('api-keys', ApiKeyController::class)->except(['show']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
 });
@@ -47,3 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
     Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
 });
+
+Route::get('/home', function () {
+    return view('welcome');
+})->name('home');

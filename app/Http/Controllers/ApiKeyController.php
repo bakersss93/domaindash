@@ -19,6 +19,12 @@ class ApiKeyController extends Controller
         return view('admin.api-keys.create');
     }
 
+    public function edit($id)
+    {
+        $apiKey = ApiKey::findOrFail($id);
+        return view('admin.api-keys.edit', compact('apiKey'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -43,6 +49,21 @@ class ApiKeyController extends Controller
         return redirect()->route('api-keys.index')
             ->with('success', 'API key created successfully.')
             ->with('plainToken', $plainToken);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'key_name' => 'required|string|max:255',
+            'permissions' => 'required|in:read-only,read-write',
+            'allowed_ips' => 'nullable|string',
+            'rate_limit' => 'required|integer|min:1',
+        ]);
+
+        $apiKey = ApiKey::findOrFail($id);
+        $apiKey->update($request->only(['key_name','description','permissions','allowed_ips','rate_limit','expires_at']));
+
+        return redirect()->route('api-keys.index')->with('success', 'API key updated successfully.');
     }
 
     public function destroy($id)
