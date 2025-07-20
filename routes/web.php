@@ -45,5 +45,8 @@ Route::middleware([
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
-    Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 });

@@ -12,6 +12,10 @@
         <header class="bg-blue-600 text-white py-4">
             <div class="container mx-auto flex justify-between items-center">
                 <h1 class="text-xl font-bold">{{ config('app.name', 'DomainDash') }}</h1>
+                <form action="{{ route('search.index') }}" method="GET" class="flex items-center mx-4">
+                    <input type="text" name="q" placeholder="Search" class="rounded px-2 py-1 text-black" />
+                    <button type="submit" class="ml-2 bg-white text-blue-600 px-2 py-1 rounded">Go</button>
+                </form>
                 <nav>
                     @auth
                         <a href="{{ route('home') }}" class="px-4">Home</a>

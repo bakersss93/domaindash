@@ -4,8 +4,8 @@
 <div class="container mx-auto py-8">
     <h1 class="text-2xl font-bold mb-4">My Domains</h1>
 
-    <form action="{{ route('customer.domains.search') }}" method="GET" class="flex mb-4">
-        <input type="text" name="query" placeholder="Search domains" class="border rounded-l px-4 py-2" />
+    <form action="{{ route('search.index') }}" method="GET" class="flex mb-4">
+        <input type="text" name="q" placeholder="Search" class="border rounded-l px-4 py-2 text-black" />
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r">Search</button>
     </form>
 
