@@ -25,6 +25,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
+    Route::get('admin-dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 });
 #Customer
 Route::middleware(['auth', 'role:customer'])->group(function () {

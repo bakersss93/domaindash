@@ -19,6 +19,7 @@
                             <a href="{{ route('users.index') }}" class="px-4">Users</a>
                             <a href="{{ route('email-templates.index') }}" class="px-4">Email Templates</a>
                             <a href="{{ route('api-keys.index') }}" class="px-4">API Keys</a>
+                            <a href="{{ route('admin.dashboard') }}" class="px-4">Dashboard</a>
                         @endif
                         <a href="{{ route('logout') }}" class="px-4">Logout</a>
                     @endauth

@@ -44,6 +44,8 @@ class DomainController extends Controller
                 );
             }
 
+            \App\Models\SystemStatus::first()->update(['last_sync_at' => now()]);
+
             return redirect()->route('admin.domains.index')
                              ->with('success', 'Domains updated successfully.');
         } catch (\Exception $e) {

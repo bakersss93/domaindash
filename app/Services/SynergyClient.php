@@ -40,6 +40,11 @@ class SynergyClient
         return $this->request('BulkDomainInfo', $params);
     }
 
+    public function getAccountBalance()
+    {
+        return $this->request('GetResellerBalance');
+    }
+
     public function __call(string $name, array $arguments)
     {
         $params = $arguments[0] ?? [];
