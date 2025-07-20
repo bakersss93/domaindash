@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\HostingService;
 use App\Models\User;
+use App\Services\SynergyClient;
 
 class HostingServiceController extends Controller
 {
@@ -92,5 +93,20 @@ class HostingServiceController extends Controller
         $hostingService->delete();
 
         return redirect()->route('hosting-services.index')->with('success', 'Hosting service deleted successfully.');
+    }
+
+    /**
+     * Redirect to the cPanel login URL for the hosting service.
+     */
+    public function cpanel(string $id, SynergyClient $synergy)
+    {
+        $service = HostingService::findOrFail($id);
+        $response = $synergy->hostingGetLogin($service->id);
+
+        if (isset($response['loginUrl'])) {
+            return redirect()->away($response['loginUrl']);
+        }
+
+        return back()->with('error', 'Unable to generate cPanel login link.');
     }
 }

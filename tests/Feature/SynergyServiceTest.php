@@ -65,6 +65,25 @@ class SynergyServiceTest extends TestCase
         $synergy->checkDomainAvailability('example.com');
     }
 
+    public function test_hosting_get_login_invokes_correct_method(): void
+    {
+        $mock = Mockery::mock(\SoapClient::class);
+        $mock->shouldReceive('__soapCall')
+            ->once()
+            ->with('hostingGetLogin', [[
+                'resellerID' => 'test-reseller',
+                'apiKey' => 'test-key',
+                'hoid' => 123,
+            ]])
+            ->andReturn((object)['loginUrl' => 'https://example.com/cpanel']);
+
+        $synergy = $this->getSynergyWithMockClient($mock);
+
+        $result = $synergy->hostingGetLogin(123);
+
+        $this->assertEquals(['loginUrl' => 'https://example.com/cpanel'], $result);
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();

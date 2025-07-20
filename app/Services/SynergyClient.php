@@ -40,6 +40,22 @@ class SynergyClient
         return $this->request('BulkDomainInfo', $params);
     }
 
+    /**
+     * Check the availability of a domain name.
+     */
+    public function checkDomainAvailability(string $domainName)
+    {
+        return $this->request('CheckDomain', ['domainName' => $domainName]);
+    }
+
+    /**
+     * Retrieve a cPanel single sign on URL for the supplied hosting order ID.
+     */
+    public function hostingGetLogin(int $hoid)
+    {
+        return $this->request('hostingGetLogin', ['hoid' => $hoid]);
+    }
+
     public function __call(string $name, array $arguments)
     {
         $params = $arguments[0] ?? [];

@@ -17,6 +17,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('domains', DomainController::class)->except(['show']);
     Route::resource('hosting-services', HostingServiceController::class)->except(['show']);
+    Route::get('hosting-services/{id}/cpanel', [HostingServiceController::class, 'cpanel'])->name('hosting-services.cpanel');
     Route::resource('ssl-services', SSLServiceController::class)->except(['show']);
     Route::resource('email-templates', EmailTemplateController::class)->except(['show']);
     Route::resource('notifications', NotificationController::class)->only(['index']);
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('domains', [DomainController::class, 'index'])->name('customer.domains.index');
     Route::get('hosting-services', [HostingServiceController::class, 'index'])->name('customer.hosting.index');
+    Route::get('hosting-services/{id}/cpanel', [HostingServiceController::class, 'cpanel'])->name('customer.hosting.cpanel');
     Route::get('ssl-services', [SSLServiceController::class, 'index'])->name('customer.ssl.index');
 });
 
