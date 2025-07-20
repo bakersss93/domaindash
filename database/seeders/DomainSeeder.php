@@ -11,14 +11,14 @@ class DomainSeeder extends Seeder
     {
         Domain::create([
             'domain_name' => 'example.com',
-            'customer_id' => 2,
+            'client_id' => 1,
             'auto_renew' => true,
             'renewal_date' => now()->addYear(),
         ]);
 
         Domain::create([
             'domain_name' => 'example.org',
-            'customer_id' => 2,
+            'client_id' => 1,
             'auto_renew' => false,
             'renewal_date' => now()->addMonths(6),
         ]);

@@ -11,14 +11,14 @@ class SSLServiceSeeder extends Seeder
     {
         SSLService::create([
             'certificate_name' => 'SSL for example.com',
-            'customer_id' => 2,
+            'client_id' => 1,
             'expiration_date' => now()->addMonths(11),
             'details' => json_encode(['provider' => 'Comodo', 'type' => 'DV']),
         ]);
 
         SSLService::create([
             'certificate_name' => 'SSL for example.org',
-            'customer_id' => 2,
+            'client_id' => 1,
             'expiration_date' => now()->addMonths(6),
             'details' => json_encode(['provider' => 'GoDaddy', 'type' => 'EV']),
         ]);

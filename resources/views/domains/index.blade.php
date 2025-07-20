@@ -8,7 +8,7 @@
     <thead>
         <tr>
             <th class="border border-gray-300 px-4 py-2">Domain Name</th>
-            <th class="border border-gray-300 px-4 py-2">Customer</th>
+            <th class="border border-gray-300 px-4 py-2">Client</th>
             <th class="border border-gray-300 px-4 py-2">Renewal Date</th>
             <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
@@ -17,7 +17,7 @@
         @foreach ($domains as $domain)
         <tr>
             <td class="border border-gray-300 px-4 py-2">{{ $domain->domain_name }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $domain->customer->first_name }} {{ $domain->customer->surname }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ optional($domain->client)->business_name }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ $domain->renewal_date }}</td>
             <td class="border border-gray-300 px-4 py-2">
                 <a href="{{ route('domains.edit', $domain->id) }}" class="text-blue-500">Edit</a>

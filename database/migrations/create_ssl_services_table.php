@@ -11,7 +11,7 @@ class CreateSslServicesTable extends Migration
         Schema::create('ssl_services', function (Blueprint $table) {
             $table->id();
             $table->string('certificate_name');
-            $table->foreignId('customer_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('client_id')->nullable()->constrained('clients')->onDelete('set null');
             $table->date('expiration_date');
             $table->json('details');
             $table->timestamps();
