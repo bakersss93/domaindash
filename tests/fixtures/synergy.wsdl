@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<definitions name="Synergy" targetNamespace="urn:Synergy" xmlns:tns="urn:Synergy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types/>
+    <message name="CheckDomainRequest"/>
+    <message name="CheckDomainResponse"/>
+    <portType name="SynergyPortType">
+        <operation name="CheckDomain" />
+    </portType>
+    <binding name="SynergyBinding" type="tns:SynergyPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="CheckDomain">
+            <soap:operation soapAction="CheckDomain"/>
+            <input><soap:body use="encoded" namespace="urn:Synergy" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="urn:Synergy" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+    </binding>
+    <service name="SynergyService">
+        <port name="SynergyPort" binding="tns:SynergyBinding">
+            <soap:address location="http://localhost"/>
+        </port>
+    </service>
+</definitions>
