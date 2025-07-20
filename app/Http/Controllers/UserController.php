@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
+use Laravel\Fortify\Actions\DisableTwoFactorAuthentication;
 
 class UserController extends Controller
 {
@@ -97,5 +99,19 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function enforceMfa(User $user, EnableTwoFactorAuthentication $enable)
+    {
+        $enable($user, true);
+
+        return redirect()->back()->with('success', 'MFA enforced for user.');
+    }
+
+    public function resetMfa(User $user, DisableTwoFactorAuthentication $disable)
+    {
+        $disable($user);
+
+        return redirect()->back()->with('success', 'MFA reset for user.');
     }
 }

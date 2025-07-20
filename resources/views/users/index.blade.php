@@ -31,6 +31,14 @@
                     @method('DELETE')
                     <button type="submit" class="text-red-500">Delete</button>
                 </form>
+                <form action="{{ route('users.mfa.enforce', $user->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="text-green-500 ml-2">Enforce MFA</button>
+                </form>
+                <form action="{{ route('users.mfa.reset', $user->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="text-yellow-500 ml-2">Reset MFA</button>
+                </form>
             </td>
             @endif
         </tr>

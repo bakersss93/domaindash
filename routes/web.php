@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\SocialLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
+    Route::post('users/{user}/mfa/enforce', [UserController::class, 'enforceMfa'])->name('users.mfa.enforce');
+    Route::post('users/{user}/mfa/reset', [UserController::class, 'resetMfa'])->name('users.mfa.reset');
 });
 #Customer
 Route::middleware(['auth', 'role:customer'])->group(function () {
@@ -47,3 +50,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
     Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
 });
+Route::get('auth/{provider}', [SocialLoginController::class, 'redirect'])->name('oauth.redirect');
+Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('oauth.callback');

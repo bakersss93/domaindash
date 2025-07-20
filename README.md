@@ -39,6 +39,15 @@ SYNERGY_RESELLER_ID=your-reseller-id
 SYNERGY_API_KEY=your-api-key
 ```
 
+To enable third-party logins, also configure your OAuth credentials:
+
+```env
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+MICROSOFT_CLIENT_ID=your-microsoft-client-id
+MICROSOFT_CLIENT_SECRET=your-microsoft-client-secret
+```
+
 These values are used by `config/synergy.php` and are needed for any interaction with the Synergy API.
 
 ## Running tests
