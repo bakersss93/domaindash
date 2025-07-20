@@ -50,4 +50,36 @@ class DomainController extends Controller
             return back()->withErrors(['error' => 'Failed to update domains: ' . $e->getMessage()]);
         }
     }
+
+    public function checkAvailability(Request $request)
+    {
+        $request->validate(['domain' => 'required|string']);
+
+        try {
+            $result = $this->synergy->checkDomainAvailability($request->input('domain'));
+            return response()->json($result);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function initiateTransfer(Domain $domain)
+    {
+        try {
+            $this->synergy->initiateDomainTransfer(['domainName' => $domain->domain_name]);
+            return back()->with('success', 'Transfer initiated');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function renew(Domain $domain)
+    {
+        try {
+            $this->synergy->renewDomain($domain->domain_name);
+            return back()->with('success', 'Domain renewed');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }

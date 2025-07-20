@@ -40,6 +40,21 @@ class SynergyClient
         return $this->request('BulkDomainInfo', $params);
     }
 
+    public function checkDomainAvailability(string $domain)
+    {
+        return $this->request('CheckDomain', ['domainName' => $domain]);
+    }
+
+    public function initiateDomainTransfer(array $params)
+    {
+        return $this->request('InitiateDomainTransfer', $params);
+    }
+
+    public function renewDomain(string $domain, int $years = 1)
+    {
+        return $this->request('RenewDomain', ['domainName' => $domain, 'years' => $years]);
+    }
+
     public function __call(string $name, array $arguments)
     {
         $params = $arguments[0] ?? [];
