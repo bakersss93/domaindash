@@ -38,7 +38,24 @@ class SSLServiceController extends Controller
             'details' => 'nullable|string',
         ]);
 
-        SSLService::create($data);
+        $service = SSLService::create($data);
+
+        if ($service->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $service->certificate_name,
+                    'type' => 'SSL',
+                    'client_id' => $service->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $service->certificate_name,
+                    'type' => 'SSL',
+                    'client_id' => $service->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('ssl-services.index')->with('success', 'SSL service created successfully.');
     }
@@ -75,6 +92,23 @@ class SSLServiceController extends Controller
 
         $sslService = SSLService::findOrFail($id);
         $sslService->update($data);
+
+        if ($sslService->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $sslService->certificate_name,
+                    'type' => 'SSL',
+                    'client_id' => $sslService->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $sslService->certificate_name,
+                    'type' => 'SSL',
+                    'client_id' => $sslService->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('ssl-services.index')->with('success', 'SSL service updated successfully.');
     }

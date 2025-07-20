@@ -171,6 +171,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         App\Providers\SynergyWholesaleServiceProvider::class,
+        App\Providers\HaloServiceProvider::class,
+        App\Providers\ITGlueServiceProvider::class,
 
     ])->toArray(),
 

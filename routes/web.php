@@ -25,6 +25,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('api-keys', ApiKeyController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('synergy-api', [SynergyAPIController::class, 'edit'])->name('synergy-api.edit');
     Route::post('synergy-api', [SynergyAPIController::class, 'update'])->name('synergy-api.update');
+    Route::get('halo-api', [HaloAPIController::class, 'edit'])->name('halo-api.edit');
+    Route::post('halo-api', [HaloAPIController::class, 'update'])->name('halo-api.update');
+    Route::get('itglue-api', [ITGlueAPIController::class, 'edit'])->name('itglue-api.edit');
+    Route::post('itglue-api', [ITGlueAPIController::class, 'update'])->name('itglue-api.update');
 });
 #Customer
 Route::middleware(['auth', 'role:customer'])->group(function () {

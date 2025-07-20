@@ -38,7 +38,24 @@ class DomainController extends Controller
             'renewal_date' => 'nullable|date',
         ]);
 
-        Domain::create($data);
+        $domain = Domain::create($data);
+
+        if ($domain->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $domain->domain_name,
+                    'type' => 'Domain',
+                    'client_id' => $domain->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $domain->domain_name,
+                    'type' => 'Domain',
+                    'client_id' => $domain->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('domains.index')->with('success', 'Domain created successfully.');
     }
@@ -75,6 +92,23 @@ class DomainController extends Controller
 
         $domain = Domain::findOrFail($id);
         $domain->update($data);
+
+        if ($domain->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $domain->domain_name,
+                    'type' => 'Domain',
+                    'client_id' => $domain->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $domain->domain_name,
+                    'type' => 'Domain',
+                    'client_id' => $domain->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('domains.index')->with('success', 'Domain updated successfully.');
     }

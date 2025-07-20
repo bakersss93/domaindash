@@ -40,7 +40,24 @@ class HostingServiceController extends Controller
             'hosting_plan' => 'required|string',
         ]);
 
-        HostingService::create($data);
+        $service = HostingService::create($data);
+
+        if ($service->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $service->service_name,
+                    'type' => 'Hosting',
+                    'client_id' => $service->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $service->service_name,
+                    'type' => 'Hosting',
+                    'client_id' => $service->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('hosting-services.index')->with('success', 'Hosting service created successfully.');
     }
@@ -79,6 +96,23 @@ class HostingServiceController extends Controller
 
         $hostingService = HostingService::findOrFail($id);
         $hostingService->update($data);
+
+        if ($hostingService->customer_id) {
+            try {
+                app(\App\Services\HaloClient::class)->upsertAsset([
+                    'name' => $hostingService->service_name,
+                    'type' => 'Hosting',
+                    'client_id' => $hostingService->customer_id,
+                ]);
+                app(\App\Services\ITGlueClient::class)->upsertConfiguration([
+                    'name' => $hostingService->service_name,
+                    'type' => 'Hosting',
+                    'client_id' => $hostingService->customer_id,
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Integration sync failed: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('hosting-services.index')->with('success', 'Hosting service updated successfully.');
     }
