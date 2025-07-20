@@ -14,6 +14,7 @@ class RoleMiddlewareTest extends TestCase
 
         Route::middleware('role:admin')->get('/admin-only', fn () => 'admin');
         Route::middleware('role:customer')->get('/customer-only', fn () => 'customer');
+        Route::middleware('role:technician')->get('/tech-only', fn () => 'tech');
     }
 
     public function test_admin_can_access_admin_route(): void
@@ -51,5 +52,29 @@ class RoleMiddlewareTest extends TestCase
         $this->actingAs($user);
 
         $this->get('/customer-only')->assertForbidden();
+    }
+
+    public function test_technician_can_access_technician_route(): void
+    {
+        $user = User::factory()->make(['id' => 1, 'role' => 'technician']);
+        $this->actingAs($user);
+
+        $this->get('/tech-only')->assertOk();
+    }
+
+    public function test_customer_cannot_access_technician_route(): void
+    {
+        $user = User::factory()->make(['id' => 1, 'role' => 'customer']);
+        $this->actingAs($user);
+
+        $this->get('/tech-only')->assertForbidden();
+    }
+
+    public function test_admin_cannot_access_technician_route(): void
+    {
+        $user = User::factory()->make(['id' => 1, 'role' => 'admin']);
+        $this->actingAs($user);
+
+        $this->get('/tech-only')->assertForbidden();
     }
 }
