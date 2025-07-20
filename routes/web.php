@@ -46,4 +46,6 @@ Route::middleware([
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
     Route::get('/dashboard/search', [CustomerController::class, 'searchDomains'])->name('customer.domains.search');
+    Route::get('/support-ticket', [SupportTicketController::class, 'create'])->name('support-ticket.create');
+    Route::post('/support-ticket', [SupportTicketController::class, 'store'])->name('support-ticket.store');
 });
